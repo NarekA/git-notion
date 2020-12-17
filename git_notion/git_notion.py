@@ -18,7 +18,7 @@ client = NotionClient(token_v2=TOKEN)
 
 def get_or_create_page(base_page, title):
     page = None
-    for child in base_page.children:
+    for child in base_page.children.filter(PageBlock):
         if child.title == title:
             page = child
 

@@ -29,3 +29,10 @@ git-notion
 git-notion --path path/to/your/repo
 ```
 *The V2 Token can be found in the cookies when you open notion in your browser
+
+## Pushing to Pypi
+
+```bash
+python3 setup.py sdist bdist_wheel
+python3 -m twine upload dist/*
+```
