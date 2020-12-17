@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 
-"""The setup script."""
-
 from setuptools import setup, find_packages
+import os
 
-with open('requirements.in') as f:
+base_dir = os.path.abspath(os.path.dirname(__file__))
+
+with open(os.path.join('requirements.in')) as f:
     requirements = [l.strip() for l in f.readlines() if l.strip()]
+
+with open(os.path.join(base_dir, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup_requirements = ['pytest-runner', ]
 
@@ -35,6 +39,8 @@ setup(
     license="MIT license",
     include_package_data=True,
     keywords='git_notion',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     name='git_notion',
     packages=find_packages(include=['git_notion', 'git_notion.*']),
     setup_requires=setup_requirements,
