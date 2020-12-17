@@ -1,7 +1,7 @@
 Git Notion
 ==========
 
-Syncs Github markdown files to Notion. Example [Notion page](https://www.notion.so/git_notion-195c08d3d14140eb9a35ac00f9a0f078).
+Syncs Github markdown files in your repository to Notion. See example [Notion page](https://www.notion.so/git_notion-195c08d3d14140eb9a35ac00f9a0f078).
 
 ## Installation
 ```
@@ -17,6 +17,10 @@ pip install -e .
 ```
 
 ## Configuring
+
+`NOTION_TOKEN_V2` - Can be found in your [browser cookies](https://www.redgregory.com/notion/2020/6/15/9zuzav95gwzwewdu1dspweqbv481s5) for Notion's website.
+`NOTION_ROOT_PAGE` - URL for notion page. Repo docs will be a new page under this page.
+`NOTION_IGNORE_REGEX` - Regex for paths to ignore.
 
 These environment variables can be set.
 ```bash
@@ -42,9 +46,8 @@ git-notion
 git-notion --path path/to/your/repo
 ```
 
-*The V2 Token can be found in the cookies when you open notion in your browser
 
-## Pushing to Pypi
+## Pushing to PYPI
 
 ```bash
 bumpversion patch   # Look-up bumpversion
