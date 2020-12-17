@@ -25,7 +25,7 @@ export NOTION_ROOT_PAGE="https://www.notion.so/..."  # Can be in setup.cfg as we
 export NOTION_IGNORE_REGEX="models/.*"               # Can be in setup.cfg as well
 ```
 
-These paramaters can be set in the `setup.cfg` for the repo.
+These parameters can be set in the `setup.cfg` for the repo.
 ```
 [git-notion]
 ignore_regex = models/.*
@@ -48,6 +48,7 @@ git-notion --path path/to/your/repo
 
 ```bash
 bumpversion patch   # Look-up bumpversion
+rm -rf dist/
 python3 setup.py sdist bdist_wheel
 python3 -m twine upload dist/*
 ```
