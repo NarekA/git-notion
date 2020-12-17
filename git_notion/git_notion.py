@@ -1,19 +1,25 @@
 """Main module."""
+import hashlib
 import os
-from pathlib import Path
+import glob
+from configparser import ConfigParser
+import re
 
 from notion.block import PageBlock
+from notion.block import TextBlock
 from notion.client import NotionClient
 from md2notion.upload import upload
-# from setuptools.config import read_configuration
 
 
 TOKEN = os.getenv("NOTION_TOKEN_V2", "")
-ROOT_PAGE_URL = os.getenv("NOTION_ROOT_PAGE", "")
-# https://www.notion.so/swiftlane/Git-Docs-82371f8d465e4bf591a0ba1ea43d89f0
+_client = None
 
 
-client = NotionClient(token_v2=TOKEN)
+def get_client():
+    global _client
+    if not _client:
+        _client = NotionClient(token_v2=TOKEN)
+    return _client
 
 
 def get_or_create_page(base_page, title):
@@ -30,8 +36,17 @@ def get_or_create_page(base_page, title):
 def upload_file(base_page, filename: str, page_title=None):
     page_title = page_title or filename
     page = get_or_create_page(base_page, page_title)
+    hasher = hashlib.md5()
+    with open(filename, "rb") as mdFile:
+        buf = mdFile.read()
+        hasher.update(buf)
+    if page.children and hasher.hexdigest() in str(page.children[0]):
+        return page
+
     for child in page.children:
         child.remove()
+    page.children.add_new(TextBlock, title=f"MD5: {hasher.hexdigest()}")
+
     with open(filename, "r", encoding="utf-8") as mdFile:
         upload(mdFile, page)
     return page
@@ -39,11 +54,15 @@ def upload_file(base_page, filename: str, page_title=None):
 
 def sync_to_notion(repo_root: str = "."):
     os.chdir(repo_root)
-    repo_name = Path(os.getcwd()).name
-    # conf_dict = read_configuration("setup.cfg")
+    config = ConfigParser()
+    config.read(os.path.join(repo_root, "setup.cfg"))
+    repo_name = os.path.basename(os.getcwd())
 
-    root_page = client.get_block(ROOT_PAGE_URL)
+    root_page_url = os.getenv("NOTION_ROOT_PAGE") or config.get('git_notion', 'notion_root_page')
+    ignore_regex = os.getenv("NOTION_IGNORE_REGEX") or config.get('git_notion', 'ignore_regex', fallback=None)
+    root_page = get_client().get_block(root_page_url)
     repo_page = get_or_create_page(root_page, repo_name)
-    upload_file(repo_page, "README.md")
-    for file in sorted(Path("docs").glob("*.md")):
-        upload_file(repo_page, str(file))
+    for file in glob.glob("**/*.md", recursive=True):
+        if ignore_regex is None or not re.match(ignore_regex, file):
+            print(file)
+            upload_file(repo_page, file)
