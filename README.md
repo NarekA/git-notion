@@ -29,7 +29,7 @@ These paramaters can be set in the `setup.cfg` for the repo.
 ```
 [git_notion]
 ignore_regex = models/.*
-notion_root_page = https://www.notion.so/swiftlane/Code-Repos-82371f8d465e4bf591a0ba1ea43d89f0
+notion_root_page = https://www.notion.so/...
 ```
 
 
