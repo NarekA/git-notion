@@ -4,10 +4,16 @@ Git Notion
 Syncs Github Markdown files to Notion
 
 ## Installation
+```
+pip install git-notion
+```
+
+or for local installation:
+
 ```bash
 git clone https://github.com/NarekA/git-notion.git
 cd git-notion
-pip install .
+pip install -e .
 ```
 
 ## Usage
