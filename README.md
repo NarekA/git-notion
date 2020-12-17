@@ -1,7 +1,7 @@
 Git Notion
 ==========
 
-Syncs Github Markdown files to Notion
+Syncs Github markdown files to Notion. Example [Notion page](https://www.notion.so/git_notion-195c08d3d14140eb9a35ac00f9a0f078).
 
 ## Installation
 ```
@@ -27,7 +27,7 @@ export NOTION_IGNORE_REGEX="models/.*"               # Can be in setup.cfg as we
 
 These paramaters can be set in the `setup.cfg` for the repo.
 ```
-[git_notion]
+[git-notion]
 ignore_regex = models/.*
 notion_root_page = https://www.notion.so/...
 ```
