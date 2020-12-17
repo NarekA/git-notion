@@ -32,7 +32,6 @@ ignore_regex = models/.*
 notion_root_page = https://www.notion.so/...
 ```
 
-
 ## Usage
 
 ```bash
@@ -48,6 +47,7 @@ git-notion --path path/to/your/repo
 ## Pushing to Pypi
 
 ```bash
+bumpversion patch   # Look-up bumpversion
 python3 setup.py sdist bdist_wheel
 python3 -m twine upload dist/*
 ```
