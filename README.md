@@ -1,7 +1,9 @@
 Git Notion
 ==========
 
-Syncs Github markdown files in your repository to Notion. See example [Notion page](https://www.notion.so/git_notion-195c08d3d14140eb9a35ac00f9a0f078).
+Syncs Github markdown files in your repository to Notion.
+This utility is described in the following [blog post](https://www.swiftlane.com/blog/syncing-docs-from-code-repositories-to-notion/)
+See example [Notion page](https://www.notion.so/git_notion-195c08d3d14140eb9a35ac00f9a0f078).
 
 ## Installation
 ```
