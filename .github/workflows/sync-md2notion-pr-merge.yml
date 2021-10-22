@@ -1,0 +1,36 @@
+name: Sync md files to notion when PR merged
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  sync:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v2
+        - name: Setup Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: '3.x'
+        - name: Cache pip
+          uses: actions/cache@v2
+          with:
+            # This path is specific to Ubuntu
+            path: ~/.cache/pip
+            # Look to see if there is a cache hit for the corresponding requirements file
+            key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+            restore-keys: |
+              ${{ runner.os }}-pip-
+              ${{ runner.os }}-
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip git-notion
+        - name: Sync md doc
+          run: |
+            git-notion
+          env:
+            NOTION_IGNORE_REGEX: ${{ secrets.NOTION_IGNORE_REGEX }}
+            NOTION_ROOT_PAGE: ${{ secrets.NOTION_ROOT_PAGE }}
+            NOTION_TOKEN_V2: ${{ secrets.NOTION_TOKEN_V2 }}
