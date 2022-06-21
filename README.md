@@ -25,12 +25,14 @@ pip install -e .
 `NOTION_TOKEN_V2` - Can be found in your [browser cookies](https://www.redgregory.com/notion/2020/6/15/9zuzav95gwzwewdu1dspweqbv481s5) for Notion's website.
 `NOTION_ROOT_PAGE` - URL for notion page. Repo docs will be a new page under this page.
 `NOTION_IGNORE_REGEX` - Regex for paths to ignore.
+`NOTION_SEARCH_BY_REGEX` - Regex for pattern for file search.
 
 These environment variables can be set.
 ```bash
 export NOTION_TOKEN_V2=<YOUR_TOKEN>
 export NOTION_ROOT_PAGE="https://www.notion.so/..."  # Can be in setup.cfg as well
 export NOTION_IGNORE_REGEX="models/.*"               # Can be in setup.cfg as well
+export NOTION_SEARCH_BY_REGEX="**/*.md"              # Can be in setup.cfg as well
 ```
 
 These parameters can be set in the `setup.cfg` for the repo.
@@ -38,6 +40,7 @@ These parameters can be set in the `setup.cfg` for the repo.
 [git-notion]
 ignore_regex = models/.*
 notion_root_page = https://www.notion.so/...
+search_by_regex = "**/*.md"
 ```
 
 ## Usage
