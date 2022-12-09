@@ -5,6 +5,8 @@ import glob
 from configparser import ConfigParser
 import re
 
+from pathlib import Path
+
 from notion.block import PageBlock
 from notion.block import TextBlock
 from notion.client import NotionClient
@@ -31,6 +33,12 @@ def get_or_create_page(base_page, title):
     if not page:
         page = base_page.children.add_new(PageBlock, title=title)
     return page
+
+
+def create_path_pages(base_page, path_pages):
+    for page in path_pages:
+        base_page = get_or_create_page(base_page, page)
+    return base_page
 
 
 def upload_file(base_page, filename: str, page_title=None):
@@ -62,7 +70,10 @@ def sync_to_notion(repo_root: str = "."):
     ignore_regex = os.getenv("NOTION_IGNORE_REGEX") or config.get('git-notion', 'ignore_regex', fallback=None)
     root_page = get_client().get_block(root_page_url)
     repo_page = get_or_create_page(root_page, repo_name)
-    for file in glob.glob("**/*.md", recursive=True):
-        if ignore_regex is None or not re.match(ignore_regex, file):
-            print(file)
-            upload_file(repo_page, file)
+    for path in glob.glob("**/*.md", recursive=True):
+        if ignore_regex is None or not re.match(ignore_regex, path):
+            print(path)
+            path_pages = path.split(os.path.sep)[:-1]
+            base_page = create_path_pages(repo_page, path_pages)
+            page_title = Path(path).stem
+            upload_file(base_page, path, page_title)
