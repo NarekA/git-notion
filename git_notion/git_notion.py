@@ -55,7 +55,7 @@ def sync_to_notion(repo_root: str = "."):
     os.chdir(repo_root)
     config = ConfigParser()
     config.read(os.path.join(repo_root, "setup.cfg"))
-    repo_name = os.path.basename(os.getcwd())
+    repo_name = os.getenv("NOTION_REPO_NAME") or config.get('git-notion', 'notion_repo_name', fallback=os.path.basename(os.getcwd()))
     root_page_url = os.getenv("NOTION_ROOT_PAGE") or config.get('git-notion', 'notion_root_page')
     ignore_regex = os.getenv("NOTION_IGNORE_REGEX") or config.get('git-notion', 'ignore_regex', fallback=None)
     search_by = os.getenv("NOTION_SEARCH_BY_REGEX") or config.get('git-notion', "search_by_regex", fallback="**/*.md")
