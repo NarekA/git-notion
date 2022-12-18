@@ -10,7 +10,6 @@ from notion.block import TextBlock
 from notion.client import NotionClient
 from md2notion.upload import upload
 
-
 TOKEN = os.getenv("NOTION_TOKEN_V2", "")
 _client = None
 
@@ -56,13 +55,13 @@ def sync_to_notion(repo_root: str = "."):
     os.chdir(repo_root)
     config = ConfigParser()
     config.read(os.path.join(repo_root, "setup.cfg"))
-    repo_name = os.path.basename(os.getcwd())
-
+    repo_name = os.getenv("NOTION_REPO_NAME") or config.get('git-notion', 'notion_repo_name', fallback=os.path.basename(os.getcwd()))
     root_page_url = os.getenv("NOTION_ROOT_PAGE") or config.get('git-notion', 'notion_root_page')
     ignore_regex = os.getenv("NOTION_IGNORE_REGEX") or config.get('git-notion', 'ignore_regex', fallback=None)
+    search_by = os.getenv("NOTION_SEARCH_BY_REGEX") or config.get('git-notion', "search_by_regex", fallback="**/*.md")
     root_page = get_client().get_block(root_page_url)
     repo_page = get_or_create_page(root_page, repo_name)
-    for file in glob.glob("**/*.md", recursive=True):
+    for file in glob.glob(search_by, recursive=True):
         if ignore_regex is None or not re.match(ignore_regex, file):
             print(file)
             upload_file(repo_page, file)

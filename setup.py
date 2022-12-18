@@ -29,7 +29,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Syncs Github Mmarkdown files to Notion",
+    description="Syncs Github Markdown or any files to Notion",
     entry_points={
         'console_scripts': [
             'git-notion=git_notion.cli:main',
