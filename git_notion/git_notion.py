@@ -52,17 +52,28 @@ def upload_file(base_page, filename: str, page_title=None):
     return page
 
 
-def sync_to_notion(repo_root: str = "."):
+def sync_to_notion(repo_root: str = ".", config_file_path: str = "notion_config.ini"):
     os.chdir(repo_root)
     config = ConfigParser()
-    config.read(os.path.join(repo_root, "setup.cfg"))
+    config.read(os.path.join(repo_root, config_file_path))
     repo_name = os.path.basename(os.getcwd())
 
     root_page_url = os.getenv("NOTION_ROOT_PAGE") or config.get('git-notion', 'notion_root_page')
     ignore_regex = os.getenv("NOTION_IGNORE_REGEX") or config.get('git-notion', 'ignore_regex', fallback=None)
     root_page = get_client().get_block(root_page_url)
     repo_page = get_or_create_page(root_page, repo_name)
+
     for file in glob.glob("**/*.md", recursive=True):
         if ignore_regex is None or not re.match(ignore_regex, file):
             print(file)
-            upload_file(repo_page, file)
+
+            # Extract folder from the file path
+            folder = os.path.dirname(file)
+
+            # Use folder-specific URL if available, otherwise use the default repo_page URL
+            folder_url = config.get('folders', folder, fallback=None)
+            upload_file(repo_page if folder_url is None else get_client().get_block(folder_url), file)
+
+
+# Example call:
+# sync_to_notion(repo_root="/path/to/repo", config_file_path="notion_config.ini")
