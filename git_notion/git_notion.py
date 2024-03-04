@@ -52,10 +52,10 @@ def upload_file(base_page, filename: str, page_title=None):
     return page
 
 
-def sync_to_notion(repo_root: str = ".", config_file_path: str = "notion_config.ini"):
+def sync_to_notion(repo_root: str = "."):
     os.chdir(repo_root)
     config = ConfigParser()
-    config.read(os.path.join(repo_root, config_file_path))
+    config.read(os.path.join(repo_root, "setup.cfg"))
     repo_name = os.path.basename(os.getcwd())
 
     root_page_url = os.getenv("NOTION_ROOT_PAGE") or config.get('git-notion', 'notion_root_page')
