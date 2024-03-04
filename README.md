@@ -20,6 +20,9 @@ cd git-notion
 pip install -e .
 ```
 
+To fix HTTP errors, then run:
+```python -m pip install notion-cobertos-fork```
+
 ## Configuring
 
 `NOTION_TOKEN_V2` - Can be found in your [browser cookies](https://www.redgregory.com/notion/2020/6/15/9zuzav95gwzwewdu1dspweqbv481s5) for Notion's website.
