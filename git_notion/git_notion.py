@@ -62,7 +62,22 @@ def sync_to_notion(repo_root: str = "."):
     ignore_regex = os.getenv("NOTION_IGNORE_REGEX") or config.get('git-notion', 'ignore_regex', fallback=None)
     root_page = get_client().get_block(root_page_url)
     repo_page = get_or_create_page(root_page, repo_name)
+
     for file in glob.glob("**/*.md", recursive=True):
         if ignore_regex is None or not re.match(ignore_regex, file):
-            print(file)
-            upload_file(repo_page, file)
+
+            # Extract folder from the file path
+            folder = os.path.dirname(file)
+
+            # Use folder-specific URL if available, otherwise use the default repo_page URL
+            folder_url = config.get('folders', folder, fallback=None)
+            upload_file(repo_page if folder_url is None else get_client().get_block(folder_url), file)
+            if folder_url:
+                print(file, "uploaded to: ", folder_url)
+            else:
+                print(file, "uploaded to: default repo page")
+
+
+
+# Example call:
+# sync_to_notion(repo_root="/path/to/repo", config_file_path="notion_config.ini")

@@ -40,6 +40,13 @@ ignore_regex = models/.*
 notion_root_page = https://www.notion.so/...
 ```
 
+If you want to map specific Github folders to Notion subpages besides the `notion_root_page`, you can add the folder names and subpage URLs as parameters in the `setup.cfg` for the repo:
+```
+[folders]
+# docs = <any_notion_url> # This can be any subpage of the Notion root page
+# docs/NestedTest = <any_other_notion_url> # This can be the same subpage as above, or any other subpage of the Notion root page
+```
+
 ## Usage
 
 ```bash
