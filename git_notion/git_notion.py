@@ -65,7 +65,6 @@ def sync_to_notion(repo_root: str = "."):
 
     for file in glob.glob("**/*.md", recursive=True):
         if ignore_regex is None or not re.match(ignore_regex, file):
-            print(file)
 
             # Extract folder from the file path
             folder = os.path.dirname(file)
@@ -73,6 +72,11 @@ def sync_to_notion(repo_root: str = "."):
             # Use folder-specific URL if available, otherwise use the default repo_page URL
             folder_url = config.get('folders', folder, fallback=None)
             upload_file(repo_page if folder_url is None else get_client().get_block(folder_url), file)
+            if folder_url:
+                print(file, "uploaded to: ", folder_url)
+            else:
+                print(file, "uploaded to: default repo page")
+
 
 
 # Example call:
